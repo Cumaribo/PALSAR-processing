@@ -96,7 +96,7 @@ writeRaster(merged, 'Palsar_18HH.tif', format='GTiff')
 merged <- brick("Palsar_10HH_Spk.tif") 
 
 # Convert DN to dB
-merged  <- 10*log10(merged^2)+83
+merged  <- 10*log10(merged^2)-83
 plot(merged)
 
 writeRaster(merged, 'Palsar10HH_dB.tif', format='GTiff')
