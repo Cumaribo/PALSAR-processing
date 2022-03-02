@@ -66,16 +66,5 @@ msk<-raster('/path/to/template/template.tif')
 merged <- crop(merged, extent(msk)))                                                                                                                                                                                                                       |                                                                                                      
 writeRaster(merged, paste('palsar', year, sep='_'), format='GTiff',overwrite=TRUE)  
 #######################################
-# load the filtered rasters  
 
-setwd("path/to/thelee outputs ")
-files <- list.files(".", "tif")
-r.list <- list()
-for(i in 1:length(files)){
-    r.list[[i]] <- raster(files[i])}
-# sigma naught correction function
-sigma_n <- function(pals){
-    filtered <- 10*log10(pals^2)-83
-}
-r.list <- map(1:length(r.list), function(x) sigma_n(r.list[[x]])) 
-map(1:length(r.list), function(x) writeRaster(r.list[[x]],paste(names(r.list[[x]]), 'SN', sep='_'),format='GTiff'))
+
