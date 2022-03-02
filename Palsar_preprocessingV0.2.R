@@ -65,8 +65,8 @@ merged<-list(merged1,merged2)
 rm(merged1, merged2)
 msk<-raster('/path/to/template/template.tif') 
 merged <- map(1:length(merged), function(x) crop(merged[[x]], extent(msk)))
-merged <- stack(merged[[1]], merged[[2]]                                                                                                                       
-writeRaster(merged, paste('palsar', year, sep='_', format='GTiff'))
+merged <- stack(merged[[1]], merged[[2]])                                                                                                                       
+writeRaster(merged, paste('palsar', year, sep='_'), format='GTiff')
 
 # load the filtered rasters  
 
