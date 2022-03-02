@@ -60,14 +60,12 @@ namer<-c('HH', 'HV')
 #dater<-### fill this ####
 merged1 <- do.call(merge, r.list1)
 merged2 <- do.call(merge, r.list2)
-rm(r.list1, r.list2)
-merged<-list(merged1,merged2)
-rm(merged1, merged2)
-msk<-raster('/path/to/template/template.tif') 
-merged <- map(1:length(merged), function(x) crop(merged[[x]], extent(msk)))
-merged <- stack(merged[[1]], merged[[2]])                                                                                                                       
-writeRaster(merged, paste('palsar', year, sep='_'), format='GTiff')
-
+rm(r.list1, r.list2)                                                                                                                                                        
+merged <- stack(merged1, merged2)                                                                                                                                                                          
+msk<-raster('/path/to/template/template.tif')                                                                                                                                            
+merged <- crop(merged, extent(msk)))                                                                                                                                                                                                                       |                                                                                                      
+writeRaster(merged, paste('palsar', year, sep='_'), format='GTiff',overwrite=TRUE)  
+#######################################
 # load the filtered rasters  
 
 setwd("path/to/thelee outputs ")
