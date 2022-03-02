@@ -52,6 +52,7 @@ r.list2 <- list()                                        # load the rasters
 for(i in 1:length(files1)){
     r.list1[[i]] <- raster(files1[i])}
 for(i in 1:length(files2)){
+  r.list2[[i]] <- raster(files2[i])}
  # merge the raster/create the mosaic
 set year
   year<-'2018'
