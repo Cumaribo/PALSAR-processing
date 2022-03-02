@@ -62,8 +62,9 @@ merged2 <- do.call(merge, r.list2)
 merged<-list(merged1,merged2)
 msk<-raster('/path/to/template/template.tif') 
 merged <- map(1:length(merged), function(x) crop(merged[[x]], extent(msk)))
-future_map(1:length(merged), function(x) writeRaster(merged[[x]], paste(namer[x], year, sep='_'), format='GTiff', 
-                                                                        overwrite=TRUE)) 
+merged <- stack(merged[[1]], merged[[2]]                                                                                                                       
+writeRaster(merged, paste('palsar', year, sep='_', format='GTiff'))
+
 # load the filtered rasters  
 
 setwd("path/to/thelee outputs ")
