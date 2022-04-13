@@ -1,0 +1,40 @@
+#This function resamples the palsar data into the ARD spatial resolution, using the outline of colombia as a template.
+
+packs <- c('raster','rgdal','parallel', 'gdalR', 'R.utils', 'rvest','xml2','tidyverse', 'landscapemetrics', 'sf','dplyr','httr','getPass','gdalUtils','gdalUtilities','rgeos', 'viridis', 'rasterVis','rlang', 'rasterDT', 'furrr')
+sapply(packs, require, character.only = TRUE)
+
+dir. <- "/path/filesresample/Lee_filter"
+#Load list of files. Use "SN" as the pattern
+tiffes<- dir(dir., pattern='SN.tif')
+#Subset (if necessary)
+#Create list of paths to the tif files
+tiffes1 <- file.path(dir.,tiffes)
+                                        #create folder to store the new rasters
+There is a better wy to do this. Just paste the first part of the path.
+
+dir.create("/path/filesresample/Lee_filter/outs")
+#Path to the template raster
+
+reference.<-raster('/storage/share/BiomapCol_22/mask_colombia.tif')
+#Create list of paths for the destinations
+tiffes2  <- file.path("/storage/home/TU/tug76452/Lee_filter/outs",tiffes)
+
+#Function gdal_resample:
+ gdal_resample <- function(input, output, r_base, method = 'bilinear'){
+   #Geometry attributes
+   t1 <- c(xmin(r_base), ymin(r_base),
+           xmax(r_base), ymax(r_base))
+   res <- res(r_base)
+                    #GDAL time!
+   gdalwarp(tiffes1, tiffes2,
+  tr = res, te = t1, r = method)#, num_threads=ncores)
+ resample_raster = raster(tiffes2)
+ return(resample_raster)
+ }
+
+#Set the environment for multi core. Pending to find a more efficient way to do this
+mem_future <- 10000*1024^2 #this is toset the limit to 1GB
+options(future.globals.maxSize= mem_future)
+plan(multisession, workers=4)
+
+test<- map(1:length(tiffes1), function(x) gdal_resample(tiffes1[x], tiffes2[x], reference., method='bilinear'))#, ncores=6)
