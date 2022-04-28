@@ -1,10 +1,10 @@
 #Purpose: This script presents a workflow to prepare ALOS-PALSAR data and re-sample it
 # to build multi stack raster bricks, combining SAR and Landsat Multi Spectral data
 # Authors: Jeronimo Rodriguez and Victoria Sarmiento 2020
-# Update: March 2022
+# Update: April 2022
 
                                         # Required libraries --------------
-dir()
+setwd('/storage/home/TU/tug76452/RA_Spring_2022/Mekong')
 
 packs <- c('raster', 'tidyverse', 'furrr')
 sapply(packs, require, character.only = TRUE)
@@ -16,17 +16,17 @@ rasterOptions(tmpdir=tempdir)
 # 
 
 # create untar function
-files <- list.files(".", "tar.gz")
+files <- list.files(".", "zip")
 # Create function for untar
 fdc <- function(files,i){
-    f1 <- untar(files[i])
+    f1 <- unzip(files[i])#, exdir = "/storage/home/TU/tug76452/RA_Spring_2022/Mekong/MMXV")
     return(f1)
 }
 
 #CREATE EMPTY list
 tiffes <- list()
 # run function
-ptm<-proc.time()
+
 for(i in 1:length(files)){
     tiffes[[i]] <- fdc(files,i)
 }
@@ -40,9 +40,10 @@ for(i in 1:length(files)){
                                         #List HH/HV files
 #This is missing. Depending on the year, the names of the rasters change slightly. (include the "F02DAR" or not)
 # and needs to be adjusted manually
-files1 <- list.files(".", "sl_HH_F02DAR$")
-files2 <- list.files(".", "sl_HV_F02DAR$")
+files1 <- list.files(".", "sl_HH_F02DAR")
+files2 <- list.files(".", "sl_HV_F02DAR")
 
+#here, add a piece of code that reads form inside folders
 mem_future <- 10000*1024^2 #this is to set the limit to 1GB
 options(future.globals.maxSize= mem <- future)
 plan(multisession, workers=2)
@@ -54,17 +55,19 @@ for(i in 1:length(files1)){
 for(i in 1:length(files2)){
   r.list2[[i]] <- raster(files2[i])}
  # merge the raster/create the mosaic
-set year
-  year<-'2018'
+#set year
+  year<-'2021'
 namer<-c('HH', 'HV')
 #dater<-### fill this ####
 merged1 <- do.call(merge, r.list1)
 merged2 <- do.call(merge, r.list2)
-rm(r.list1, r.list2)                                                                                                                                                        
-merged <- stack(merged1, merged2)                                                                                                                                                                          
-msk<-raster('/path/to/template/template.tif')                                                                                                                                            
-merged <- crop(merged, extent(msk)))                                                                                                                                                                                                                       |                                                                                                      
+rm(r.list1, r.list2)                                                                                                 
+merged <- stack(merged1, merged2)                                                                                    
+msk<-raster('/storage/share/Mekong_ARD/Classifications/2000_Mekong_ard.tif')
+merged <- crop(merged, extent(msk))
 writeRaster(merged, paste('palsar', year, sep='_'), format='GTiff',overwrite=TRUE)  
 #######################################
 
+
+getwd()
 
