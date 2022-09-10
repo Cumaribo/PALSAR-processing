@@ -1,3 +1,4 @@
+# i am saving this from Mekong. I tried it and did not work. Will fix this issue now. 
 #This function resamples the palsar data into the ARD spatial resolution, using the outline of colombia as a template.
 
 packs <- c('raster','rgdal','parallel', 'gdalR', 'R.utils', 'rvest','xml2','tidyverse', 'landscapemetrics', 'sf','dplyr','httr','getPass','gdalUtils','gdalUtilities','rgeos', 'viridis', 'rasterVis','rlang', 'rasterDT', 'furrr')
