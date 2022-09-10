@@ -3,9 +3,9 @@
 packs <- c('raster','rgdal','parallel', 'gdalR', 'R.utils', 'rvest','xml2','tidyverse', 'landscapemetrics', 'sf','dplyr','httr','getPass','gdalUtils','gdalUtilities','rgeos', 'viridis', 'rasterVis','rlang', 'rasterDT', 'furrr')
 sapply(packs, require, character.only = TRUE)
 
-dir. <- "/path/filesresample/Lee_filter"
+dir. <- "/storage/home/TU/tug76452/RA_Spring_2022/Mekong"
 #Load list of files. Use "SN" as the pattern
-tiffes<- dir(dir., pattern='SN.tif')
+tiffes<- dir(dir., pattern='S.tif')
 #Subset (if necessary)
 #Create list of paths to the tif files
 tiffes1 <- file.path(dir.,tiffes)
@@ -38,3 +38,8 @@ options(future.globals.maxSize= mem_future)
 plan(multisession, workers=4)
 
 test<- map(1:length(tiffes1), function(x) gdal_resample(tiffes1[x], tiffes2[x], reference., method='bilinear'))#, ncores=6)
+
+dir()
+
+
+getwd()
